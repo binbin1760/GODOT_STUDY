@@ -1,44 +1,55 @@
-extends CharacterBody2D
+class_name Player extends CharacterBody2D
 
-const speed = 400
-const jump_speed = -800
-const garvity = 1800
-var isLsatFrame = false  #是否为动画最后一帧
+
+var states:Array[player_state]
+var current_state:player_state:
+	get:return states.front()
+var previous_state:player_state:
+	get: return states[1]
+
+var direction:Vector2 = Vector2.ZERO
+var gravity:float = 980
+
+func _ready() -> void:
+	initialize_states()
+	update_direction()
+	pass
+
+func _process(delta: float) -> void:
+	change_state(current_state.process(delta))
+	pass
 
 func _physics_process(delta: float) -> void:
-		var direction = Input.get_axis("move_left","move_right")
-		if is_on_floor() == false:
-			velocity.y += garvity * delta
-		#跳跃
-		if Input.is_action_just_pressed("move_jump") and is_on_floor():
-			velocity.y+=jump_speed
-			velocity.x = direction * speed*2
-		#角色移动
-		if direction !=0:
-			velocity.x = direction *speed
-		else:
-			velocity.x = 0
-		
-		#角色朝向
-		if direction == -1 :
-			$AnimatedSprite2D.flip_h = true
-		else :
-			$AnimatedSprite2D.flip_h = false
-		#是否按下AD键
-		var isPressedAD = (Input.is_action_pressed("move_left") or Input.is_action_pressed("move_right"))
-		#角色动作
-		if isPressedAD  and is_on_floor():
-			$AnimatedSprite2D.play("walk")
-			isLsatFrame = false
-		elif !is_on_floor():
-			$AnimatedSprite2D.play("jump")
-		else:
-			$AnimatedSprite2D.play("Idie")
-			isLsatFrame = false
-		move_and_slide()
+	pass	
 
+func initialize_states()->void:
+	states = []
+	for StatesSunNode in $States.get_children():
+		if StatesSunNode is player_state:
+			states.append(StatesSunNode)
+			StatesSunNode.player = self
+	
+	if states.size() == 0:
+		return
+	
+	for state in states:
+		state.init()
+	#初始化其实状态
+	current_state.enter()
+	change_state(current_state)
 
-func _on_animated_sprite_2d_animation_finished() -> void:
-	if $AnimatedSprite2D.animation == "jump":
-		isLsatFrame = true
-		$AnimatedSprite2D.pause()
+func change_state(new_state:player_state)->void:
+	if new_state == null:
+		return
+	elif new_state == current_state:
+		return
+	if current_state:
+		current_state.exit()
+	states.push_front(new_state)
+	current_state.enter()
+	states.resize(3)
+	pass
+
+func update_direction()->void:
+	var prev_direction:Vector2 = direction
+	direction = Input.get_vector("move_left","move_right",'move_up','move_down')

@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=4 uid="uid://u8soo8x7ho08"]
+[gd_scene format=4 uid="uid://u8soo8x7ho08"]
 
 [ext_resource type="Texture2D" uid="uid://dp4ryivfe8a1c" path="res://art/Mossy Tileset/Mossy - TileSet.png" id="1_xb63x"]
 [ext_resource type="Texture2D" uid="uid://c7hwqca4ijrtj" path="res://art/individual_sheets/male_hero_template-idle.png" id="2_f5lw1"]
@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://cpn1sa6xlmr3d" path="res://art/individual_sheets/male_hero_template-jump.png" id="4_sbhkq"]
 [ext_resource type="Texture2D" uid="uid://bijavcwiqab04" path="res://art/individual_sheets/male_hero_template-run.png" id="5_wi015"]
 [ext_resource type="Texture2D" uid="uid://diaminguajqr1" path="res://art/individual_sheets/male_hero_template-walk.png" id="6_bktqc"]
+[ext_resource type="Script" uid="uid://cj87jjan26a8u" path="res://player/states/idle.gd" id="6_wi015"]
+[ext_resource type="Script" uid="uid://dgqdooldl3rrr" path="res://player/states/walk.gd" id="7_bktqc"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gab3r"]
 radius = 20.0
@@ -602,28 +604,37 @@ terrain_set_0/terrain_0/name = "Terrain 0"
 terrain_set_0/terrain_0/color = Color(0.6475433, 0.07601624, 0.54523385, 1)
 sources/0 = SubResource("TileSetAtlasSource_xb63x")
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Node2D" unique_id=1145476223]
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1947904147]
 position = Vector2(520, 596)
 scale = Vector2(2.5, 2.5)
 collision_mask = 3
 script = ExtResource("2_o0bm1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=2003010516]
 position = Vector2(-4, -8)
 shape = SubResource("CapsuleShape2D_gab3r")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=1370076331]
 position = Vector2(-5, -7)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_kgypw")
 animation = &"jump"
 script = SubResource("GDScript_o0bm1")
 
-[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=1678653598]
+limit_smoothed = true
 
-[node name="TileMapLayer" type="TileMapLayer" parent="."]
+[node name="States" type="Node" parent="CharacterBody2D" unique_id=2066137011]
+
+[node name="Idle" type="Node" parent="CharacterBody2D/States" unique_id=1929980992]
+script = ExtResource("6_wi015")
+
+[node name="walk" type="Node" parent="CharacterBody2D/States" unique_id=786405906]
+script = ExtResource("7_bktqc")
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1823133746]
 scale = Vector2(0.25, 0.25)
 tile_map_data = PackedByteArray("AAAAAAsAAAACAAcAAAABAAsAAAADAAcAAAACAAsAAAACAAcAAAADAAsAAAADAAcAAAAEAAsAAAACAAcAAAAFAAsAAAADAAcAAAAGAAsAAAACAAcAAAAHAAsAAAADAAcAAAAIAAsAAAACAAcAAAAJAAsAAAADAAcAAAAKAAsAAAACAAcAAAALAAsAAAADAAcAAAAMAAsAAAACAAcAAAANAAsAAAADAAcAAAAOAAsAAAACAAcAAAAPAAsAAAADAAcAAAAQAAsAAAACAAcAAAARAAsAAAADAAcAAAASAAsAAAACAAcAAAATAAsAAAADAAcAAAAAAAoAAAACAAYAAAABAAoAAAACAAYAAAACAAoAAAACAAYAAAADAAoAAAACAAYAAAAEAAoAAAACAAYAAAAFAAoAAAACAAYAAAAGAAoAAAACAAYAAAAHAAoAAAACAAYAAAAIAAoAAAACAAYAAAAJAAoAAAACAAYAAAAKAAoAAAACAAYAAAALAAoAAAACAAYAAAAMAAoAAAACAAYAAAANAAoAAAACAAYAAAAOAAoAAAACAAYAAAAPAAoAAAAMAAAAAAAQAAoAAAACAAEAAAARAAoAAAACAAEAAAASAAoAAAAJAAYAAAATAAoAAAACAAYAAAAUAAoAAAACAAYAAAAUAAsAAAACAAcAAAD//woAAAABAAYAAAD//wsAAAABAAcAAAACAAcAAAABAAYAAAACAAgAAAABAAcAAAADAAcAAAACAAYAAAADAAgAAAACAAcAAAAEAAcAAAADAAYAAAAEAAgAAAADAAcAAAAFAAcAAAAEAAYAAAAFAAgAAAAEAAcAAAAVAAoAAAADAAYAAAAWAAoAAAACAAYAAAAXAAoAAAADAAYAAAAYAAoAAAACAAYAAAAZAAoAAAAMAAAAAAAaAAoAAAANAAAAAAAbAAoAAAADAAYAAAAcAAoAAAACAAYAAAAdAAoAAAADAAYAAAAeAAoAAAACAAYAAAAfAAoAAAADAAYAAAAgAAoAAAACAAYAAAAhAAoAAAADAAYAAAAgAAsAAAACAAcAAAAhAAsAAAADAAcAAAAiAAoAAAACAAYAAAAjAAoAAAADAAYAAAAkAAoAAAAEAAYAAAAkAAsAAAAEAAcAAAAVAAsAAAADAAcAAAAWAAsAAAACAAcAAAAXAAsAAAADAAcAAAAYAAsAAAACAAcAAAAZAAsAAAADAAcAAAAaAAsAAAACAAcAAAAbAAsAAAADAAcAAAAcAAsAAAACAAcAAAAdAAsAAAADAAcAAAAeAAsAAAACAAcAAAAfAAsAAAADAAcAAAAiAAsAAAACAAcAAAAjAAsAAAADAAcAAAAQAAkAAAACAAAAAAARAAkAAAACAAAAAAAPAAkAAAAAAAAAAAASAAkAAAAFAAAAAAAJAAUAAAABAAYAAAAJAAYAAAABAAcAAAAKAAUAAAACAAYAAAAKAAYAAAACAAcAAAALAAUAAAADAAYAAAALAAYAAAADAAcAAAAMAAUAAAAEAAYAAAAMAAYAAAAEAAcAAAASAAQAAAABAAYAAAASAAUAAAABAAcAAAATAAQAAAACAAYAAAATAAUAAAACAAcAAAAUAAQAAAADAAYAAAAUAAUAAAADAAcAAAAVAAQAAAAEAAYAAAAVAAUAAAAEAAcAAAACAAIAAAABAAYAAAACAAMAAAABAAcAAAADAAIAAAACAAYAAAADAAMAAAACAAcAAAAEAAIAAAADAAYAAAAEAAMAAAADAAcAAAAFAAIAAAAEAAYAAAAFAAMAAAAEAAcAAAAgAAEAAAABAAYAAAAgAAIAAAABAAcAAAAhAAEAAAACAAYAAAAhAAIAAAACAAcAAAAiAAEAAAADAAYAAAAiAAIAAAADAAcAAAAjAAEAAAAEAAYAAAAjAAIAAAAEAAcAAAAZAAYAAAAGAAAAAAAaAAYAAAAHAAAAAAAZAAcAAAAGAAEAAAAZAAgAAAAGAAIAAAAaAAcAAAAHAAEAAAAaAAgAAAAHAAIAAAAZAAkAAAAGAAEAAAAaAAkAAAAHAAEAAAA=")
 tile_set = SubResource("TileSet_f5lw1")
