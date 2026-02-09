@@ -1,13 +1,14 @@
-class_name  player_state_walk extends player_state
+class_name  player_state_run extends player_state
  
-@export var walk_speed:float = 200
+@export var run_speed:float = 400
+@export var run_in_hair:float = 300
 
 func init()->void:
 	pass
 
 
 func enter()->void:
-	%playerStateAnime.play("walk")
+	%playerStateAnime.play("run")
 	pass
 
 
@@ -26,5 +27,7 @@ func  process(_delta:float)->player_state:
 		return idle
 	return next_state
 func physics_process(_delta:float)->player_state:
-	player.velocity.x = walk_speed*player.direction.x
+	player.velocity.x = run_speed*player.direction.x
+	if not player.is_on_floor():
+		return fail
 	return next_state

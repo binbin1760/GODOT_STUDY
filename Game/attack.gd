@@ -1,11 +1,10 @@
-class_name  player_state_idle extends player_state
+class_name  player_state_attack extends player_state
 
 func init()->void:
 	pass
 
 
 func enter()->void:
-	%playerStateAnime.play("Idie")
 	pass
 
 
@@ -14,15 +13,10 @@ func exit()->void:
 
 
 func handle_inupt(event:InputEvent)->player_state:
-	if event.is_action_pressed("move_left") or event.is_action_pressed("move_right"):
-		return run
-	elif event.is_action_pressed("move_jump") and player.is_on_floor():
-		return jump
 	return next_state
 
 func  process(_delta:float)->player_state:
 	return next_state
 
 func physics_process(_delta:float)->player_state:
-	player.velocity.x = 0
 	return next_state
