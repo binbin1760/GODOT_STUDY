@@ -9,7 +9,7 @@ var previous_state:player_state:
 
 var direction:Vector2 = Vector2.ZERO
 var gravity:float = 980.0
-
+var gravity_multiplier:float = 1.0
 
 func _ready() -> void:
 	initialize_states()
@@ -31,7 +31,7 @@ func _process(delta: float) -> void:
 	pass
 
 func _physics_process(delta: float) -> void:
-	velocity.y += gravity * delta
+	velocity.y += gravity * delta* gravity_multiplier
 	# move_and_slide 存在一个局限性即当我贴在墙边进行跳跃时，左跳，又跳 会出现X方向的速度被重置为0的情况
 	# 当X轴的速度被重置为0时就会出现原地跳跃的现象
 	move_and_slide()

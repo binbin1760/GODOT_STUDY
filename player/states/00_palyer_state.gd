@@ -14,7 +14,6 @@ var next_state:player_state = null
 func init()->void:
 	pass
 
-
 func enter()->void:
 	pass
 

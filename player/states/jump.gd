@@ -30,6 +30,7 @@ func handle_inupt(event:InputEvent)->player_state:
 	if not player.is_on_floor() and event.is_action_pressed("move_jump"):
 		%playerStateAnime.stop()
 		return second_jump		
+	
 	return next_state
 
 func  process(_delta:float)->player_state:	
